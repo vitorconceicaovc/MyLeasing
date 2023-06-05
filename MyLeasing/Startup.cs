@@ -29,7 +29,9 @@ namespace MyLeasing
 			services.AddDbContext<DataContext>(cfg =>
 			{
 				cfg.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
-			});	
+			});
+
+			services.AddTransient<SeedDb>();
 			services.AddControllersWithViews();
 
 		}
