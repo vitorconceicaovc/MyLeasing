@@ -4,10 +4,14 @@ namespace MyLeasing.Web.Data.Entities
 {
 	public class Owner
 	{
-		public int Id { get; set; }		
+		public int Id { get; set; }
 
-		public string Document { get; set; }
+        [Required]
+        [MaxLength(8)]
+        public string Document { get; set; }
 
+		[Required]
+		[MaxLength(50)]	
 		[Display(Name = "Owner Name")]
 		public string Name { get; set; }
 
