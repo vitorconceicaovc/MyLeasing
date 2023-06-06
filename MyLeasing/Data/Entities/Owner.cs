@@ -23,6 +23,8 @@ namespace MyLeasing.Web.Data.Entities
 
 		public string Address { get; set; }
 
+		public User User { get; set; }	
+
 		
 	}
 }
