@@ -62,6 +62,17 @@ namespace MyLeasing.Web.Data
                 AddOwner("Ging Liren", user);
                 await _context.SaveChangesAsync();
             }
+
+            if(!_context.Lessees.Any())
+            {
+                AddLessee("Mano", "Vítorr", user);
+                AddLessee("Mana", "Telma", user);
+                AddLessee("Mano", "Guil", user);
+                AddLessee("Mano", "Kuster", user);
+                AddLessee("Mana", "Amaral", user);
+                await _context.SaveChangesAsync();
+            }   
+            
         }
 
         private void AddOwner(string name, User user)
@@ -72,6 +83,17 @@ namespace MyLeasing.Web.Data
                 Name = name,
                 User = user
             });
+        }
+
+        private void AddLessee(string firstName, string lastName, User user)
+        {
+            _context.Lessees.Add(new Lessee 
+            {
+                Document = _random.Next(99999999).ToString(),
+                FirstName = firstName, 
+                LastName = lastName,      
+                User = user     
+            });  
         }
     }
 }

@@ -21,6 +21,22 @@ namespace MyLeasing.Web.Helpers
             };
         }
 
+        public Lessee ToLessee(LesseeViewModel model, string path, bool isNew)
+        {
+            return new Lessee
+            {
+                Id = isNew ? 0 : model.Id,
+                Document = model.Document,
+                FirstName = model.FirstName,
+                LastName = model.LastName,  
+                ImageUrl = path,
+                CellPhone = model.CellPhone,
+                FixedPhone = model.FixedPhone,
+                Address = model.Address,
+                User = model.User
+            };
+        }
+
         public OwnerViewModel ToOwnerViewModel(Owner owner)
         {
             return new OwnerViewModel
@@ -33,6 +49,22 @@ namespace MyLeasing.Web.Helpers
                 FixedPhone = owner.FixedPhone,
                 Address = owner.Address,
                 User = owner.User
+            };
+        }
+
+        public LesseeViewModel ToLesseeViewModel(Lessee lessee)
+        {
+            return new LesseeViewModel
+            {
+                Id = lessee.Id,
+                Document = lessee.Document,
+                FirstName = lessee.FirstName,
+                LastName = lessee.LastName,
+                ImageUrl = lessee.ImageUrl,
+                CellPhone = lessee.CellPhone,
+                FixedPhone = lessee.FixedPhone,
+                Address = lessee.Address,
+                User = lessee.User
             };
         }
     }
