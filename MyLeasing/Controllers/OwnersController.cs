@@ -16,11 +16,20 @@ namespace MyLeasing.Controllers
 	{
         private readonly IOwnerRepository _ownerRepository;
         private readonly IUserHelper _userHelper;
+        private readonly IImageHelper _imageHelper;
+        private readonly IConverterHelper _converterHelper;
 
-        public OwnersController(IOwnerRepository ownerRepository, IUserHelper userHelper)
+        public OwnersController(
+			IOwnerRepository ownerRepository, 
+			IUserHelper userHelper,
+			IImageHelper imageHelper,
+			IConverterHelper converter
+		)
 		{
             _ownerRepository = ownerRepository;
             _userHelper = userHelper;
+            _imageHelper = imageHelper;
+            _converterHelper = converter;
         }
 
 		// GET: Owners
@@ -67,24 +76,10 @@ namespace MyLeasing.Controllers
 
 				if(model.ImageProfile != null && model.ImageProfile.Length > 0)
 				{
-
-					var guid = Guid.NewGuid().ToString();
-					var file = $"{guid}.jpg";
-
-					path = Path.Combine(
-						Directory.GetCurrentDirectory(),
-						"wwwroot\\images\\owners",
-						file);
-
-					using(var stream = new FileStream(path, FileMode.Create))
-					{
-						await model.ImageProfile.CopyToAsync(stream);
-					}
-
-					path = $"~/images/owners/{file}";
+					path = await _imageHelper.UploadImageAsync(model.ImageProfile, "owners");
 				}
 
-				var owner = this.ToOwner(model, path);
+				var owner = _converterHelper.ToOwner(model, path, true);
 
 				//TODO: Modificar para o user que tiver logado
 				owner.User = await _userHelper.GetUserByEmailAsync("vitorc@gmail.com");
@@ -93,21 +88,6 @@ namespace MyLeasing.Controllers
 			}
 			return View(model);
 		}
-
-        private Owner ToOwner(OwnerViewModel model, string path)
-        {
-			return new Owner
-			{
-				Id = model.Id,
-				Document = model.Document,
-				Name = model.Name,
-				ImageUrl = path,
-				CellPhone = model.CellPhone,
-				FixedPhone = model.FixedPhone,
-				Address = model.Address,
-				User = model.User	
-			};
-        }
 
         // GET: Owners/Edit/5
         public async Task <IActionResult> Edit(int? id)
@@ -124,24 +104,9 @@ namespace MyLeasing.Controllers
 				return NotFound();
 			}
 
-			var model = this.ToOwnerViewModel(owner);
+			var model = _converterHelper.ToOwnerViewModel(owner);
 			return View(model);
 		}
-
-        private OwnerViewModel ToOwnerViewModel(Owner owner)
-        {
-			return new OwnerViewModel
-			{
-				Id = owner.Id,
-				Document = owner.Document,
-				Name = owner.Name,	
-				ImageUrl = owner.ImageUrl,	
-				CellPhone = owner.CellPhone,	
-				FixedPhone = owner.FixedPhone,
-				Address = owner.Address,
-				User = owner.User
-			};
-        }
 
         // POST: Owners/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -161,23 +126,10 @@ namespace MyLeasing.Controllers
 					if(model.ImageProfile != null && model.ImageProfile.Length > 0) 
 					{
 
-                        var guid = Guid.NewGuid().ToString();
-                        var file = $"{guid}.jpg";
-
-                        path = Path.Combine(
-							Directory.GetCurrentDirectory(),
-                            "wwwroot\\images\\owners",
-                            file);
-
-						using(var stream = new FileStream(path, FileMode.Create))
-						{
-							await model.ImageProfile.CopyToAsync(stream);
-						}
-
-                        path = $"~/images/owners/{file}";
+                        path = await _imageHelper.UploadImageAsync(model.ImageProfile, "owners");
                     }
 
-					var owner = this.ToOwner(model, path);
+					var owner = _converterHelper.ToOwner(model, path, false);
 
                     //TODO: Modificar para o user que tiver logado
                     owner.User = await _userHelper.GetUserByEmailAsync("vitorc@gmail.com");
