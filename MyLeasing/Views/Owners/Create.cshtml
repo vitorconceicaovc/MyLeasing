@@ -1,4 +1,4 @@
-﻿@model MyLeasing.Web.Data.Entities.Owner
+﻿@model MyLeasing.Web.Models.OwnerViewModel
 
 @{
     ViewData["Title"] = "Create new owner";
@@ -9,7 +9,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data" >
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Document" class="control-label"></label>
@@ -30,6 +30,11 @@
                 <label asp-for="CellPhone" class="control-label"></label>
                 <input asp-for="CellPhone" class="form-control" />
                 <span asp-validation-for="CellPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageProfile" class="control-label"></label>
+                <input asp-for="ImageProfile" class="form-control" type="file"/>
+                <span asp-validation-for="ImageProfile" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
