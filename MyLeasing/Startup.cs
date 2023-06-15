@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using MyLeasing.Web.Data;
 using MyLeasing.Web.Data.Entities;
 using MyLeasing.Web.Helpers;
+using SuperShop.Helpers;
 
 namespace MyLeasing
 {
@@ -44,7 +45,7 @@ namespace MyLeasing
 
             services.AddTransient<SeedDb>();
             services.AddScoped<IUserHelper, UserHelper>();
-            services.AddScoped<IImageHelper, ImageHelper>();
+            services.AddScoped<IBlobHelper, BlobHelper>();
             services.AddScoped<IConverterHelper, ConverterHelper>();
 
             services.AddScoped<IOwnerRepository, OwnerRepository>();

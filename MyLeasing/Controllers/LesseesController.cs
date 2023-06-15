@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,19 +13,19 @@ namespace MyLeasing.Web.Controllers
     {
         private readonly ILesseeRepository _lesseeRepository;
         private readonly IUserHelper _userHelper;
-        private readonly IImageHelper _imageHelper;
+        private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
 
         public LesseesController(
           ILesseeRepository lesseeRepository,
           IUserHelper userHelper,
-          IImageHelper imageHelper,
+          IBlobHelper blobHelper,
           IConverterHelper converter
         )
         {
             _lesseeRepository = lesseeRepository;
             _userHelper = userHelper;
-            _imageHelper = imageHelper;
+            _blobHelper = blobHelper;
             _converterHelper = converter;
         }
 
@@ -68,14 +69,14 @@ namespace MyLeasing.Web.Controllers
             if (ModelState.IsValid)
             {
 
-                var path = string.Empty;
+                Guid imageId = Guid.Empty;
 
                 if (model.ImageProfile != null && model.ImageProfile.Length > 0)
                 {
-                    path = await _imageHelper.UploadImageAsync(model.ImageProfile, "lessees");
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageProfile, "lessees");
                 }
 
-                var lessee = _converterHelper.ToLessee(model, path, true);
+                var lessee = _converterHelper.ToLessee(model, imageId, true);
 
                 //TODO: Modificar para o user que tiver logado
                 lessee.User = await _userHelper.GetUserByEmailAsync("vitorc@gmail.com");
@@ -117,15 +118,15 @@ namespace MyLeasing.Web.Controllers
                 try
                 {
 
-                    var path = model.ImageUrl;
+                    Guid imageId = model.ImageId;
 
                     if (model.ImageProfile != null && model.ImageProfile.Length > 0)
                     {
 
-                        path = await _imageHelper.UploadImageAsync(model.ImageProfile, "lessees");
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageProfile, "lessees");
                     }
 
-                    var lessee = _converterHelper.ToLessee(model, path, false);
+                    var lessee = _converterHelper.ToLessee(model, imageId, false);
 
                     //TODO: Modificar para o user que tiver logado
                     lessee.User = await _userHelper.GetUserByEmailAsync("vitorc@gmail.com");

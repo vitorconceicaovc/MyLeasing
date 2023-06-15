@@ -16,19 +16,19 @@ namespace MyLeasing.Controllers
 	{
         private readonly IOwnerRepository _ownerRepository;
         private readonly IUserHelper _userHelper;
-        private readonly IImageHelper _imageHelper;
+        private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
 
         public OwnersController(
 			IOwnerRepository ownerRepository, 
 			IUserHelper userHelper,
-			IImageHelper imageHelper,
+			IBlobHelper blobHelper,
 			IConverterHelper converter
 		)
 		{
             _ownerRepository = ownerRepository;
             _userHelper = userHelper;
-            _imageHelper = imageHelper;
+            _blobHelper = blobHelper;
             _converterHelper = converter;
         }
 
@@ -72,14 +72,14 @@ namespace MyLeasing.Controllers
 			if (ModelState.IsValid)
 			{
 
-				var path = string.Empty;
+				Guid imageId = Guid.Empty;
 
 				if(model.ImageProfile != null && model.ImageProfile.Length > 0)
 				{
-					path = await _imageHelper.UploadImageAsync(model.ImageProfile, "owners");
+					imageId = await _blobHelper.UploadBlobAsync(model.ImageProfile, "owners");
 				}
 
-				var owner = _converterHelper.ToOwner(model, path, true);
+				var owner = _converterHelper.ToOwner(model, imageId, true);
 
 				//TODO: Modificar para o user que tiver logado
 				owner.User = await _userHelper.GetUserByEmailAsync("vitorc@gmail.com");
@@ -121,15 +121,15 @@ namespace MyLeasing.Controllers
 				try
 				{
 
-					var path = model.ImageUrl;
+					Guid imageId = model.ImageId;
 
 					if(model.ImageProfile != null && model.ImageProfile.Length > 0) 
 					{
 
-                        path = await _imageHelper.UploadImageAsync(model.ImageProfile, "owners");
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageProfile, "owners");
                     }
 
-					var owner = _converterHelper.ToOwner(model, path, false);
+					var owner = _converterHelper.ToOwner(model, imageId, false);
 
                     //TODO: Modificar para o user que tiver logado
                     owner.User = await _userHelper.GetUserByEmailAsync("vitorc@gmail.com");
