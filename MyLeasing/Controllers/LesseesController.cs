@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyLeasing.Web.Data;
@@ -53,12 +54,14 @@ namespace MyLeasing.Web.Controllers
             return View(lessee);
         }
 
+        [Authorize]
         // GET: Lessees/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize]
         // POST: Lessees/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -86,6 +89,7 @@ namespace MyLeasing.Web.Controllers
             return View(model);
         }
 
+        [Authorize]
         // GET: Lessees/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -105,6 +109,7 @@ namespace MyLeasing.Web.Controllers
             return View(model);
         }
 
+        [Authorize]
         // POST: Lessees/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -148,6 +153,7 @@ namespace MyLeasing.Web.Controllers
             return View(model);
         }
 
+        [Authorize]
         // GET: Lessees/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -165,6 +171,7 @@ namespace MyLeasing.Web.Controllers
             return View(lessee);
         }
 
+        [Authorize]
         // POST: Owners/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

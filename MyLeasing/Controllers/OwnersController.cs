@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyLeasing.Web.Data;
@@ -56,16 +57,18 @@ namespace MyLeasing.Controllers
 			return View(owner);
 		}
 
+		[Authorize]
 		// GET: Owners/Create
 		public IActionResult Create()
 		{
 			return View();
 		}
 
-		// POST: Owners/Create
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
+        [Authorize]
+        // POST: Owners/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(OwnerViewModel model)
 		{
@@ -89,6 +92,7 @@ namespace MyLeasing.Controllers
 			return View(model);
 		}
 
+        [Authorize]
         // GET: Owners/Edit/5
         public async Task <IActionResult> Edit(int? id)
 		{
@@ -108,6 +112,7 @@ namespace MyLeasing.Controllers
 			return View(model);
 		}
 
+        [Authorize]
         // POST: Owners/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -151,8 +156,9 @@ namespace MyLeasing.Controllers
 			return View(model);
 		}
 
-		// GET: Owners/Delete/5
-		public async Task <IActionResult> Delete(int? id)
+        [Authorize]
+        // GET: Owners/Delete/5
+        public async Task <IActionResult> Delete(int? id)
 		{
 			if (id == null)
 			{
@@ -168,8 +174,9 @@ namespace MyLeasing.Controllers
 			return View(owner);
 		}
 
-		// POST: Owners/Delete/5
-		[HttpPost, ActionName("Delete")]
+        [Authorize]
+        // POST: Owners/Delete/5
+        [HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
