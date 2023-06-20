@@ -81,8 +81,7 @@ namespace MyLeasing.Web.Controllers
 
                 var lessee = _converterHelper.ToLessee(model, imageId, true);
 
-                //TODO: Modificar para o user que tiver logado
-                lessee.User = await _userHelper.GetUserByEmailAsync("vitorc@gmail.com");
+                lessee.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 await _lesseeRepository.CreateAsync(lessee);
                 return RedirectToAction(nameof(Index));
             }
@@ -133,8 +132,7 @@ namespace MyLeasing.Web.Controllers
 
                     var lessee = _converterHelper.ToLessee(model, imageId, false);
 
-                    //TODO: Modificar para o user que tiver logado
-                    lessee.User = await _userHelper.GetUserByEmailAsync("vitorc@gmail.com");
+                    lessee.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                     await _lesseeRepository.UpdateAsync(lessee);
                 }
                 catch (DbUpdateConcurrencyException)
